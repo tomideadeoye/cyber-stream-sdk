@@ -488,7 +488,10 @@ interface Short {
             bestRating: number;
             ratingValue: number;
         };
-        keywords: string;
+    };
+    keywords: string;
+    aggregateRating?: {
+        ratingValue?: any;
     };
 }
 interface Creator {

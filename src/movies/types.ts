@@ -48,9 +48,9 @@ export function convertToMovieDescription(
     "#ACTORS": data.s,
     "#AKA": data.q || "",
     "#IMDB_URL": `https://www.imdb.com/title/${data.id}`,
-    "#IMG_POSTER": data.i.imageUrl,
-    photo_width: data.i.width,
-    photo_height: data.i.height,
+    "#IMG_POSTER": data?.i?.imageUrl,
+    photo_width: data.i?.width,
+    photo_height: data.i?.height,
   }));
 }
 
@@ -512,7 +512,10 @@ interface Short {
       bestRating: number;
       ratingValue: number;
     };
-    keywords: string;
+  };
+  keywords: string;
+  aggregateRating?: {
+    ratingValue?: any;
   };
 }
 interface Creator {

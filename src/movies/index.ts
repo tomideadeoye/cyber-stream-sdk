@@ -6,7 +6,7 @@ import {
 } from "./types";
 
 export abstract class Base {
-  private baseUrl = "http://search.imdbot.workers.dev/";
+  private baseUrl = "https://search.imdbot.workers.dev/";
   private fallbackUrl = "https://v2.sg.media-imdb.com/suggestion/h/";
 
   protected async request<T>(query: string, retry = true): Promise<T> {
@@ -35,7 +35,8 @@ export abstract class Base {
 
     if (response.ok) {
       const data = await response.json();
-      const description = convertToMovieDescription(data["d"]) as T;
+      const totalMovies = convertToMovieDescription(data["d"]);
+      const description = totalMovies.filter((movie) => movie["#IMG_POSTER"]);
 
       return {
         ok: true,

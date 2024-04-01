@@ -8,4 +8,6 @@ applyMixins(TomideStreams, [Movies]);
 
 const client = new TomideStreams();
 
+console.log(client.getRandomMovies());
+
 export default TomideStreams;

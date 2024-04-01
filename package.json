@@ -1,6 +1,6 @@
 {
   "name": "cyber-stream-sdk",
-  "version": "1.0.10",
+  "version": "1.0.14",
   "description": "An SDK for exploring IMDB movies and shows.",
   "main": "dist/index.js",
   "scripts": {

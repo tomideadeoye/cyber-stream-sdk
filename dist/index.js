@@ -25,24 +25,27 @@ module.exports = __toCommonJS(src_exports);
 
 // src/movies/types.ts
 function convertToMovieDescription(rawData) {
-  return rawData.map((data) => ({
-    "#TITLE": data.l,
-    "#YEAR": data.y || 0,
-    "#IMDB_ID": data.id,
-    "#RANK": data.rank,
-    "#ACTORS": data.s,
-    "#AKA": data.q || "",
-    "#IMDB_URL": `https://www.imdb.com/title/${data.id}`,
-    "#IMG_POSTER": data.i.imageUrl,
-    photo_width: data.i.width,
-    photo_height: data.i.height
-  }));
+  return rawData.map((data) => {
+    var _a, _b, _c;
+    return {
+      "#TITLE": data.l,
+      "#YEAR": data.y || 0,
+      "#IMDB_ID": data.id,
+      "#RANK": data.rank,
+      "#ACTORS": data.s,
+      "#AKA": data.q || "",
+      "#IMDB_URL": `https://www.imdb.com/title/${data.id}`,
+      "#IMG_POSTER": (_a = data == null ? void 0 : data.i) == null ? void 0 : _a.imageUrl,
+      photo_width: (_b = data.i) == null ? void 0 : _b.width,
+      photo_height: (_c = data.i) == null ? void 0 : _c.height
+    };
+  });
 }
 
 // src/movies/index.ts
 var Base = class {
   constructor() {
-    this.baseUrl = "http://search.imdbot.workers.dev/";
+    this.baseUrl = "https://search.imdbot.workers.dev/";
     this.fallbackUrl = "https://v2.sg.media-imdb.com/suggestion/h/";
   }
   async request(query, retry = true) {
@@ -63,7 +66,8 @@ var Base = class {
     const response = await fetch(url);
     if (response.ok) {
       const data = await response.json();
-      const description = convertToMovieDescription(data["d"]);
+      const totalMovies = convertToMovieDescription(data["d"]);
+      const description = totalMovies.filter((movie) => movie["#IMG_POSTER"]);
       return {
         ok: true,
         description,
@@ -124,4 +128,5 @@ var TomideStreams = class extends Base {
 };
 applyMixins(TomideStreams, [Movies]);
 var client = new TomideStreams();
+console.log(client.getRandomMovies());
 var src_default = TomideStreams;
