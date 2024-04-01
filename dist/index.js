@@ -28,12 +28,10 @@ function convertToMovieDescription(rawData) {
   return rawData.map((data) => ({
     "#TITLE": data.l,
     "#YEAR": data.y || 0,
-    // Defaulting to 0 if year is not available
     "#IMDB_ID": data.id,
     "#RANK": data.rank,
     "#ACTORS": data.s,
     "#AKA": data.q || "",
-    // Assuming AKA can be derived from 'q'
     "#IMDB_URL": `https://www.imdb.com/title/${data.id}`,
     "#IMG_POSTER": data.i.imageUrl,
     photo_width: data.i.width,
@@ -97,7 +95,6 @@ var Movies = class extends Base {
   // Get Movie from API using the ID
   async getMovieById(id) {
     const movie = await this.request(`tt=${id}`);
-    console.log(movie);
     return movie;
   }
   // Search for movies by title or keywords
@@ -105,7 +102,6 @@ var Movies = class extends Base {
     const { description } = await this.request(
       `q=${encodeURIComponent(query)}`
     );
-    console.log(description);
     return description;
   }
 };

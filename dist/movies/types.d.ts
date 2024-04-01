@@ -463,6 +463,33 @@ interface Short {
     director: Actor[];
     creator: Creator[];
     duration: string;
+    image: string;
+    trailer: {
+        thumbnailUrl: string;
+        url: string;
+    };
+    review: {
+        "@type": "Review";
+        itemReviewed: {
+            "@type": "Movie";
+            url: string;
+        };
+        author: {
+            "@type": "Person";
+            name: string;
+        };
+        inLanguage: string;
+        dateCreated: string;
+        name: string;
+        reviewBody: string;
+        reviewRating: {
+            "@type": "Rating";
+            worstRating: number;
+            bestRating: number;
+            ratingValue: number;
+        };
+        keywords: string;
+    };
 }
 interface Creator {
     "@type": string;

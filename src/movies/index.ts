@@ -77,7 +77,7 @@ export class Movies extends Base {
   // Get Movie from API using the ID
   async getMovieById(id: string): Promise<Movie> {
     const movie = await this.request<Movie>(`tt=${id}`);
-    console.log(movie);
+
     return movie;
   }
 
@@ -86,7 +86,6 @@ export class Movies extends Base {
     const { description } = await this.request<MoviesApiResponse>(
       `q=${encodeURIComponent(query)}`
     );
-    console.log(description);
 
     return description;
   }

@@ -1,5 +1,4 @@
 export interface ImageInfo {
-  // Assuming the `i` object contains these fields
   url: string;
   width: number;
   height: number;
@@ -34,7 +33,7 @@ export interface MovieDescription {
 export interface MoviesApiResponse {
   ok: boolean;
   description: MovieDescription[];
-  error_code: number; // Assuming there's an error handling mechanism
+  error_code: number;
 }
 
 // Function to convert raw movie data to MovieDescription
@@ -43,11 +42,11 @@ export function convertToMovieDescription(
 ): MovieDescription[] {
   return rawData.map((data) => ({
     "#TITLE": data.l,
-    "#YEAR": data.y || 0, // Defaulting to 0 if year is not available
+    "#YEAR": data.y || 0,
     "#IMDB_ID": data.id,
     "#RANK": data.rank,
     "#ACTORS": data.s,
-    "#AKA": data.q || "", // Assuming AKA can be derived from 'q'
+    "#AKA": data.q || "",
     "#IMDB_URL": `https://www.imdb.com/title/${data.id}`,
     "#IMG_POSTER": data.i.imageUrl,
     photo_width: data.i.width,
@@ -488,6 +487,33 @@ interface Short {
   director: Actor[];
   creator: Creator[];
   duration: string;
+  image: string;
+  trailer: {
+    thumbnailUrl: string;
+    url: string;
+  };
+  review: {
+    "@type": "Review";
+    itemReviewed: {
+      "@type": "Movie";
+      url: string;
+    };
+    author: {
+      "@type": "Person";
+      name: string;
+    };
+    inLanguage: string;
+    dateCreated: string;
+    name: string;
+    reviewBody: string;
+    reviewRating: {
+      "@type": "Rating";
+      worstRating: number;
+      bestRating: number;
+      ratingValue: number;
+    };
+    keywords: string;
+  };
 }
 interface Creator {
   "@type": string;
