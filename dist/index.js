@@ -50,7 +50,9 @@ var Base = class {
   }
   async request(query, retry = true) {
     const url = `${this.baseUrl}?${query}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      mode: "no-cors"
+    });
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -63,11 +65,14 @@ var Base = class {
   async requestFallback(query) {
     console.log(`Requesting from fallback URL: ${this.fallbackUrl}?${query}`);
     const url = this.fallbackUrl + encodeURIComponent(query.replace("q=", "")) + ".json";
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      mode: "no-cors"
+    });
     if (response.ok) {
       const data = await response.json();
       const totalMovies = convertToMovieDescription(data["d"]);
       const description = totalMovies.filter((movie) => movie["#IMG_POSTER"]);
+      console.log("description: ", description);
       return {
         ok: true,
         description,

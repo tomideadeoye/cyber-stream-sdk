@@ -12,7 +12,9 @@ export abstract class Base {
   protected async request<T>(query: string, retry = true): Promise<T> {
     const url = `${this.baseUrl}?${query}`;
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      mode: "no-cors",
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -31,12 +33,15 @@ export abstract class Base {
     const url =
       this.fallbackUrl + encodeURIComponent(query.replace("q=", "")) + ".json";
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      mode: "no-cors",
+    });
 
     if (response.ok) {
       const data = await response.json();
       const totalMovies = convertToMovieDescription(data["d"]);
       const description = totalMovies.filter((movie) => movie["#IMG_POSTER"]);
+      console.log("description: ", description);
 
       return {
         ok: true,
