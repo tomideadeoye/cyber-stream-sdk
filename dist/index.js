@@ -60,7 +60,6 @@ var Base = class {
       console.log("429 Too Many Requests: Switching to fallback URL");
       return this.requestFallback(query);
     }
-    throw new Error(response.statusText);
   }
   async requestFallback(query) {
     console.log(`Requesting from fallback URL: ${this.fallbackUrl}?${query}`);
@@ -99,6 +98,7 @@ var Movies = class extends Base {
     const shuffledMovies = Array.from(uniqueMovies.values()).sort(
       () => 0.5 - Math.random()
     );
+    console.log("shuffledMovies: ", shuffledMovies);
     return shuffledMovies.slice(0, 10);
   }
   // Get Movie from API using the ID
@@ -133,5 +133,9 @@ var TomideStreams = class extends Base {
 };
 applyMixins(TomideStreams, [Movies]);
 var client = new TomideStreams();
-console.log(client.getRandomMovies());
+var randomMovies = async () => {
+  const movies = await client.getRandomMovies();
+  console.log(movies);
+};
+randomMovies();
 var src_default = TomideStreams;

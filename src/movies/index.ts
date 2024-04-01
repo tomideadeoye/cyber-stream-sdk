@@ -23,8 +23,6 @@ export abstract class Base {
       console.log("429 Too Many Requests: Switching to fallback URL");
       return this.requestFallback<T>(query);
     }
-
-    throw new Error(response.statusText);
   }
 
   private async requestFallback<T>(query: string): Promise<T> {
@@ -33,7 +31,7 @@ export abstract class Base {
     const url =
       this.fallbackUrl + encodeURIComponent(query.replace("q=", "")) + ".json";
 
-    const response = await fetch(url, {
+  const response = await fetch(url, {
       mode: "no-cors",
     });
 
@@ -76,6 +74,8 @@ export class Movies extends Base {
     const shuffledMovies = Array.from(uniqueMovies.values()).sort(
       () => 0.5 - Math.random()
     );
+
+    console.log("shuffledMovies: ", shuffledMovies);
 
     // Return the first 10 movies from the shuffled array
     return shuffledMovies.slice(0, 10);

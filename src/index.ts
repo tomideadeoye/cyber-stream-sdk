@@ -8,6 +8,11 @@ applyMixins(TomideStreams, [Movies]);
 
 const client = new TomideStreams();
 
-console.log(client.getRandomMovies());
+const randomMovies = async () => {
+  const movies = await client.getRandomMovies();
+  console.log(movies);
+};
+
+randomMovies();
 
 export default TomideStreams;
