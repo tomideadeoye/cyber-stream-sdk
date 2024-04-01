@@ -1,1 +1,131 @@
-function t(t){return t&&"object"==typeof t&&"default"in t?t:{default:t}}var e=/*#__PURE__*/t(require("isomorphic-unfetch"));function n(t,e){t.prototype=Object.create(e.prototype),t.prototype.constructor=t,r(t,e)}function r(t,e){return r=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(t,e){return t.__proto__=e,t},r(t,e)}var o=/*#__PURE__*/function(){function t(){this.baseUrl="https://search.imdbot.workers.dev/"}return t.prototype.request=function(t,n){try{var r=""+this.baseUrl+t,o=Object.assign({},n,{"Content-Type":"application/json"});return Promise.resolve(e.default(r,o)).then(function(t){var e;function n(n){if(e)return n;throw new Error(t.statusText)}var r=function(){if(t.ok)return Promise.resolve(t.json()).then(function(t){return e=1,t})}();return r&&r.then?r.then(n):n(r)})}catch(t){return Promise.reject(t)}},t}();function i(t,e,n){if(!t.s){if(n instanceof u){if(!n.s)return void(n.o=i.bind(null,t,e));1&e&&(e=n.s),n=n.v}if(n&&n.then)return void n.then(i.bind(null,t,e),i.bind(null,t,2));t.s=e,t.v=n;const r=t.o;r&&r(t)}}var u=/*#__PURE__*/function(){function t(){}return t.prototype.then=function(e,n){var r=new t,o=this.s;if(o){var u=1&o?e:n;if(u){try{i(r,1,u(this.v))}catch(t){i(r,2,t)}return r}return this}return this.o=function(t){try{var o=t.v;1&t.s?i(r,1,e?e(o):o):n?i(r,1,n(o)):i(r,2,o)}catch(t){i(r,2,t)}},r},t}();function c(t){return t instanceof u&&1&t.s}var s,f=/*#__PURE__*/function(t){function e(){return t.apply(this,arguments)||this}n(e,t);var r=e.prototype;return r.getRandomMovies=function(){try{var t,e=function(){return Array.from(r.values()).slice(0,10)},n=this,r=new Map,o=function(t,e,n){for(var r;;){var o=t();if(c(o)&&(o=o.v),!o)return s;if(o.then){r=0;break}var s=n();if(s&&s.then){if(!c(s)){r=1;break}s=s.s}if(e){var f=e();if(f&&f.then&&!c(f)){r=2;break}}}var h=new u,a=i.bind(null,h,2);return(0===r?o.then(p):1===r?s.then(v):f.then(d)).then(void 0,a),h;function v(r){s=r;do{if(e&&(f=e())&&f.then&&!c(f))return void f.then(d).then(void 0,a);if(!(o=t())||c(o)&&!o.v)return void i(h,1,s);if(o.then)return void o.then(p).then(void 0,a);c(s=n())&&(s=s.v)}while(!s||!s.then);s.then(v).then(void 0,a)}function p(t){t?(s=n())&&s.then?s.then(v).then(void 0,a):v(s):i(h,1,s)}function d(){(o=t())?o.then?o.then(p).then(void 0,a):p(o):i(h,1,s)}}(function(){return!t&&r.size<10},void 0,function(){return Promise.resolve(n.request()).then(function(e){var n=e.description;n.forEach(function(t){r.has(t["#IMDB_ID"])||r.set(t["#IMDB_ID"],t)}),n.length<10&&(t=1)})});return Promise.resolve(o&&o.then?o.then(e):e())}catch(t){return Promise.reject(t)}},r.getMovieById=function(t){try{return Promise.resolve(this.request("?tt="+t))}catch(t){return Promise.reject(t)}},r.searchMovies=function(t){try{return Promise.resolve(this.request("q="+encodeURIComponent(t))).then(function(t){return t.description})}catch(t){return Promise.reject(t)}},e}(o),h=/*#__PURE__*/function(t){function e(){return t.apply(this,arguments)||this}return n(e,t),e}(o);s=h,[f].forEach(function(t){Object.getOwnPropertyNames(t.prototype).forEach(function(e){Object.defineProperty(s.prototype,e,Object.getOwnPropertyDescriptor(t.prototype,e))})}),module.exports=h;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/index.ts
+var src_exports = {};
+__export(src_exports, {
+  default: () => src_default
+});
+module.exports = __toCommonJS(src_exports);
+
+// src/movies/types.ts
+function convertToMovieDescription(rawData) {
+  return rawData.map((data) => ({
+    "#TITLE": data.l,
+    "#YEAR": data.y || 0,
+    // Defaulting to 0 if year is not available
+    "#IMDB_ID": data.id,
+    "#RANK": data.rank,
+    "#ACTORS": data.s,
+    "#AKA": data.q || "",
+    // Assuming AKA can be derived from 'q'
+    "#IMDB_URL": `https://www.imdb.com/title/${data.id}`,
+    "#IMG_POSTER": data.i.imageUrl,
+    photo_width: data.i.width,
+    photo_height: data.i.height
+  }));
+}
+
+// src/movies/index.ts
+var Base = class {
+  constructor() {
+    this.baseUrl = "http://search.imdbot.workers.dev/";
+    this.fallbackUrl = "https://v2.sg.media-imdb.com/suggestion/h/";
+  }
+  async request(query, retry = true) {
+    const url = `${this.baseUrl}?${query}`;
+    const response = await fetch(url);
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else if (response.status === 429 && retry) {
+      console.log("429 Too Many Requests: Switching to fallback URL");
+      return this.requestFallback(query);
+    }
+    throw new Error(response.statusText);
+  }
+  async requestFallback(query) {
+    console.log(`Requesting from fallback URL: ${this.fallbackUrl}?${query}`);
+    const url = this.fallbackUrl + encodeURIComponent(query.replace("q=", "")) + ".json";
+    const response = await fetch(url);
+    if (response.ok) {
+      const data = await response.json();
+      const description = convertToMovieDescription(data["d"]);
+      return {
+        ok: true,
+        description,
+        error_code: 0
+      };
+    }
+    throw new Error(response.statusText);
+  }
+};
+var Movies = class extends Base {
+  async getRandomMovies() {
+    let uniqueMovies = /* @__PURE__ */ new Map();
+    while (uniqueMovies.size < 10) {
+      const randomLetter = String.fromCharCode(
+        97 + Math.floor(Math.random() * 26)
+      );
+      const { description } = await this.request(
+        `q=${randomLetter}`
+      );
+      description.forEach((movie) => {
+        uniqueMovies.set(movie["#IMDB_ID"], movie);
+      });
+    }
+    const shuffledMovies = Array.from(uniqueMovies.values()).sort(
+      () => 0.5 - Math.random()
+    );
+    return shuffledMovies.slice(0, 10);
+  }
+  // Get Movie from API using the ID
+  async getMovieById(id) {
+    const movie = await this.request(`tt=${id}`);
+    console.log(movie);
+    return movie;
+  }
+  // Search for movies by title or keywords
+  async searchMovies(query) {
+    const { description } = await this.request(
+      `q=${encodeURIComponent(query)}`
+    );
+    console.log(description);
+    return description;
+  }
+};
+
+// src/utils.ts
+function applyMixins(derivedCtor, baseCtors) {
+  baseCtors.forEach((baseCtor) => {
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {
+      Object.defineProperty(
+        derivedCtor.prototype,
+        name,
+        Object.getOwnPropertyDescriptor(baseCtor.prototype, name)
+      );
+    });
+  });
+}
+
+// src/index.ts
+var TomideStreams = class extends Base {
+};
+applyMixins(TomideStreams, [Movies]);
+var client = new TomideStreams();
+var src_default = TomideStreams;

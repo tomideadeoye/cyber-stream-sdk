@@ -1,3 +1,38 @@
+export interface ImageInfo {
+    url: string;
+    width: number;
+    height: number;
+    imageUrl: string;
+}
+export interface RawMovieData {
+    i: ImageInfo;
+    id: string;
+    l: string;
+    q?: string;
+    qid?: string;
+    rank: number;
+    s: string;
+    y?: number;
+    yr?: string;
+    imageUrl?: string;
+}
+export interface MovieDescription {
+    "#TITLE": string;
+    "#YEAR": number;
+    "#IMDB_ID": string;
+    "#RANK": number;
+    "#ACTORS": string;
+    "#IMDB_URL": string;
+    "#IMG_POSTER": string;
+    photo_width: number;
+    photo_height: number;
+}
+export interface MoviesApiResponse {
+    ok: boolean;
+    description: MovieDescription[];
+    error_code: number;
+}
+export declare function convertToMovieDescription(rawData: RawMovieData[]): MovieDescription[];
 export interface MovieDescription {
     "#TITLE": string;
     "#YEAR": number;
@@ -6,7 +41,6 @@ export interface MovieDescription {
     "#ACTORS": string;
     "#AKA": string;
     "#IMDB_URL": string;
-    "#IMDB_IV": string;
     "#IMG_POSTER": string;
     photo_width: number;
     photo_height: number;
@@ -22,41 +56,35 @@ export interface Movie {
     top: Top;
     main: Main;
     fake: Fake;
-    storyLine: StoryLine;
-}
-interface StoryLine {
-    id: string;
-    summaries: Summaries;
-    outlines: PrimaryVideos;
-    synopses: PrimaryVideos;
-    storylineKeywords: Images;
-    taglines: Images;
-    genres: Genres;
-    certificate?: any;
-    parentsGuide: ParentsGuide;
-    __typename: string;
-}
-interface ParentsGuide {
-    guideItems: Videos;
-    __typename: string;
-}
-interface Summaries {
-    edges: Edge4[];
-    __typename: string;
-}
-interface Edge4 {
-    node: Node4;
-    __typename: string;
-}
-interface Node4 {
-    plotText: PlotText;
-    experimental_translatedPlotText?: any;
-    author?: any;
-    __typename: string;
-}
-interface PlotText {
-    plaidHtml: string;
-    __typename: string;
+    storyLine: {
+        id: string;
+        summaries: {
+            edges: {
+                node: {
+                    plotText: {
+                        plaidHtml: string;
+                        __typename: string;
+                    };
+                    experimental_translatedPlotText?: any;
+                    author?: any;
+                    __typename: string;
+                };
+                __typename: string;
+            }[];
+            __typename: string;
+        };
+        outlines: PrimaryVideos;
+        synopses: PrimaryVideos;
+        storylineKeywords: Images;
+        taglines: Images;
+        genres: Genres;
+        certificate?: any;
+        parentsGuide: {
+            guideItems: Videos;
+            __typename: string;
+        };
+        __typename: string;
+    };
 }
 interface Fake {
     "#TITLE": string;
@@ -66,7 +94,6 @@ interface Fake {
     "#ACTORS": string;
     "#AKA": string;
     "#IMDB_URL": string;
-    "#IMDB_IV": string;
 }
 interface Main {
     id: string;
@@ -448,3 +475,4 @@ interface Actor {
     name: string;
 }
 export {};
+//# sourceMappingURL=types.d.ts.map
