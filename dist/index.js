@@ -132,10 +132,4 @@ function applyMixins(derivedCtor, baseCtors) {
 var TomideStreams = class extends Base {
 };
 applyMixins(TomideStreams, [Movies]);
-var client = new TomideStreams();
-var randomMovies = async () => {
-  const movies = await client.getRandomMovies();
-  console.log(movies);
-};
-randomMovies();
 var src_default = TomideStreams;
