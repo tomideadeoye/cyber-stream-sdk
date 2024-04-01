@@ -6,4 +6,10 @@ interface TomideStreams extends Movies {}
 
 applyMixins(TomideStreams, [Movies]);
 
+const client = new TomideStreams();
+
+const getRandomMovies = () => client.getRandomMovies();
+
+getRandomMovies();
+
 export default TomideStreams;

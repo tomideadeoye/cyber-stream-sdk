@@ -50,35 +50,29 @@ var Base = class {
   }
   async request(query, retry = true) {
     const url = `${this.baseUrl}?${query}`;
-    const response = await fetch(url, {
-      mode: "no-cors"
-    });
+    const response = await fetch(url);
     if (response.ok) {
+      console.log(response);
       const data = await response.json();
       return data;
-    } else if (response.status === 429 && retry) {
+    } else if (response.status === 429) {
       console.log("429 Too Many Requests: Switching to fallback URL");
-      return this.requestFallback(query);
+      console.log(`Requesting from fallback URL: ${this.fallbackUrl}?${query}`);
+      const url2 = this.fallbackUrl + encodeURIComponent(query.replace("q=", "")) + ".json";
+      const response2 = await fetch(url2);
+      if (response2.ok) {
+        const data = await response2.json();
+        const totalMovies = convertToMovieDescription(data["d"]);
+        const description = totalMovies.filter((movie) => movie["#IMG_POSTER"]);
+        return {
+          ok: true,
+          description,
+          error_code: 0
+        };
+      }
+    } else {
+      throw new Error(response.statusText);
     }
-  }
-  async requestFallback(query) {
-    console.log(`Requesting from fallback URL: ${this.fallbackUrl}?${query}`);
-    const url = this.fallbackUrl + encodeURIComponent(query.replace("q=", "")) + ".json";
-    const response = await fetch(url, {
-      mode: "no-cors"
-    });
-    if (response.ok) {
-      const data = await response.json();
-      const totalMovies = convertToMovieDescription(data["d"]);
-      const description = totalMovies.filter((movie) => movie["#IMG_POSTER"]);
-      console.log("description: ", description);
-      return {
-        ok: true,
-        description,
-        error_code: 0
-      };
-    }
-    throw new Error(response.statusText);
   }
 };
 var Movies = class extends Base {
@@ -132,4 +126,7 @@ function applyMixins(derivedCtor, baseCtors) {
 var TomideStreams = class extends Base {
 };
 applyMixins(TomideStreams, [Movies]);
+var client = new TomideStreams();
+var getRandomMovies = () => client.getRandomMovies();
+getRandomMovies();
 var src_default = TomideStreams;

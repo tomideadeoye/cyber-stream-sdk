@@ -12,43 +12,37 @@ export abstract class Base {
   protected async request<T>(query: string, retry = true): Promise<T> {
     const url = `${this.baseUrl}?${query}`;
 
-    const response = await fetch(url, {
-      mode: "no-cors",
-    });
+    const response = await fetch(url);
 
     if (response.ok) {
+      console.log(response);
       const data = await response.json();
       return data as T;
-    } else if (response.status === 429 && retry) {
+    } else if (response.status === 429) {
       console.log("429 Too Many Requests: Switching to fallback URL");
-      return this.requestFallback<T>(query);
+      console.log(`Requesting from fallback URL: ${this.fallbackUrl}?${query}`);
+
+      const url =
+        this.fallbackUrl +
+        encodeURIComponent(query.replace("q=", "")) +
+        ".json";
+
+      const response = await fetch(url);
+
+      if (response.ok) {
+        const data = await response.json();
+        const totalMovies = convertToMovieDescription(data["d"]);
+        const description = totalMovies.filter((movie) => movie["#IMG_POSTER"]);
+
+        return {
+          ok: true,
+          description,
+          error_code: 0,
+        } as T;
+      }
+    } else {
+      throw new Error(response.statusText);
     }
-  }
-
-  private async requestFallback<T>(query: string): Promise<T> {
-    console.log(`Requesting from fallback URL: ${this.fallbackUrl}?${query}`);
-
-    const url =
-      this.fallbackUrl + encodeURIComponent(query.replace("q=", "")) + ".json";
-
-  const response = await fetch(url, {
-      mode: "no-cors",
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      const totalMovies = convertToMovieDescription(data["d"]);
-      const description = totalMovies.filter((movie) => movie["#IMG_POSTER"]);
-      console.log("description: ", description);
-
-      return {
-        ok: true,
-        description,
-        error_code: 0,
-      } as T;
-    }
-
-    throw new Error(response.statusText);
   }
 }
 
