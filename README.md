@@ -48,7 +48,7 @@ Contributors
   - **LinkedIn**: [tomide-adeoye-828604129](https://www.linkedin.com/in/tomide-adeoye-828604129/)
   - **Twitter**: [\_Tomide
     ](https://twitter.com/_Tomide)
-  - [M](https://twitter.com/_Tomide)obile: +234 818 92 7251
+  - [M](https://twitter.com/_Tomide)obile: +234 818 192 7251
   - **Email**: [tomide@merislabs.com](mailto:tomide@merislabs.com)
 
 ## License
